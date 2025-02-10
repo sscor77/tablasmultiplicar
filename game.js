@@ -1,3 +1,51 @@
+class Ranking {
+  constructor() {
+      this.rankingKey = 'multiplicationGameRanking';
+      this.ranking = this.getRanking();
+  }
+
+  getRanking() {
+      const ranking = localStorage.getItem(this.rankingKey);
+      return ranking ? JSON.parse(ranking) : [];
+  }
+
+  saveRanking() {
+      localStorage.setItem(this.rankingKey, JSON.stringify(this.ranking));
+  }
+
+  addScore(name, table, correctAnswers) {
+      const score = correctAnswers * (2 + (table - 2) * 0.1); // Fórmula para calcular la puntuación
+      const newEntry = { name, table, score };
+
+      this.ranking.push(newEntry);
+      this.ranking.sort((a, b) => b.score - a.score); // Ordenar de mayor a menor
+      this.ranking = this.ranking.slice(0, 10); // Mantener solo las 10 mejores
+
+      this.saveRanking();
+  }
+
+  resetRanking() {
+      this.ranking = []; // Vacía el ranking
+      this.saveRanking(); // Guarda el ranking vacío en localStorage
+      this.displayRanking(); // Actualiza la visualización del ranking
+  }
+
+  displayRanking() {
+      const rankingContainer = document.getElementById('rankingList');
+      rankingContainer.innerHTML = '';
+
+      const list = document.createElement('ol');
+      this.ranking.forEach((entry, index) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `${index + 1}. ${entry.name} - Tabla del ${entry.table} - Puntuación: ${entry.score.toFixed(1)}`;
+          list.appendChild(listItem);
+      });
+
+      rankingContainer.appendChild(list);
+      document.getElementById('rankingScreen').style.display = 'block';
+  }
+}
+
 class MultiplicationGame {
   constructor(selectedTable) {
       this.selectedTable = selectedTable;
@@ -217,8 +265,8 @@ class MultiplicationGame {
 
       this.timerDisplay.style.display = 'none';
 
-      this.restartBtn.style.display = 'block';
-      this.backBtn.style.display = 'block';
+      this.restartBtn.style.display = 'none'; // Ocultar el botón de reiniciar
+      this.backBtn.style.display = 'none'; // Ocultar el botón de volver
       this.messageBox.textContent = '';
 
       // Mostrar el ranking
@@ -240,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const startScreen = document.getElementById('startScreen');
   const gameScreen = document.getElementById('gameScreen');
   const rankingScreen = document.getElementById('rankingScreen');
-  const backToStartBtn = document.getElementById('backToStartBtn');
   const resetRankingBtn = document.getElementById('resetRankingBtn');
+  const playAgainBtn = document.getElementById('playAgainBtn');
   
   // Evento para seleccionar una tabla y comenzar el juego
   document.querySelectorAll('.table-btn').forEach(btn => {
@@ -265,12 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 
-  // Evento para volver al inicio desde la pantalla de ranking
-  backToStartBtn.addEventListener('click', () => {
-      rankingScreen.style.display = 'none';
-      startScreen.style.display = 'block';
-  });
-
   // Evento para resetear el ranking con contraseña
   resetRankingBtn.addEventListener('click', () => {
       const password = prompt('Introduce la contraseña para resetear el ranking:');
@@ -281,5 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
           alert('Contraseña incorrecta. No se ha reseteado el ranking.');
       }
+  });
+
+  // Evento para jugar de nuevo (refrescar la página)
+  playAgainBtn.addEventListener('click', () => {
+      location.reload(); // Refrescar la página
   });
 });
