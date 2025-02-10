@@ -200,6 +200,24 @@ h1 {
     transform: scale(1.05);
 }
 
+.reset-ranking-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: 'Comic Neue', cursive;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: white;
+    background-color: #F44336;
+    margin-top: 10px;
+}
+
+.reset-ranking-btn:hover {
+    background-color: #E53935;
+    transform: scale(1.05);
+}
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
     .game-container {
