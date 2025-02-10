@@ -65,13 +65,22 @@ class MultiplicationGame {
       this.timerDisplay = document.getElementById('timerDisplay');
       this.tableTitle = document.getElementById('tableTitle');
 
-      // Cargar sonidos
+      // Cargar sonidos desde la carpeta "sonidos"
       this.correctSound = new Audio('sonidos/correct.mp3');
       this.incorrectSound = new Audio('sonidos/incorrect.mp3');
       this.timeoutSound = new Audio('sonidos/timeout.mp3');
 
+      // Precargar los sonidos
+      this.preloadSounds();
+
       this.resetGameState(selectedTable);
       this.initGame();
+  }
+
+  preloadSounds() {
+      this.correctSound.load();
+      this.incorrectSound.load();
+      this.timeoutSound.load();
   }
 
   resetGameState(selectedTable) {
@@ -185,6 +194,7 @@ class MultiplicationGame {
       this.showMessage('¡Tiempo agotado!', 'red');
 
       // Reproducir sonido de tiempo agotado
+      this.timeoutSound.currentTime = 0; // Reinicia el sonido si ya estaba reproduciéndose
       this.timeoutSound.play();
 
       this.optionButtons.forEach(btn => btn.disabled = true);
@@ -218,6 +228,7 @@ class MultiplicationGame {
           this.showMessage('¡Correcto!', 'green');
 
           // Reproducir sonido de acierto
+          this.correctSound.currentTime = 0; // Reinicia el sonido si ya estaba reproduciéndose
           this.correctSound.play();
       } else {
           selectedButton.classList.add('incorrect');
@@ -226,6 +237,7 @@ class MultiplicationGame {
           this.showMessage('¡Incorrecto!', 'red');
 
           // Reproducir sonido de error
+          this.incorrectSound.currentTime = 0; // Reinicia el sonido si ya estaba reproduciéndose
           this.incorrectSound.play();
       }
 
