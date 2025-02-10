@@ -60,9 +60,9 @@ class MultiplicationGame {
         this.tableTitle = document.getElementById('tableTitle');
 
         // Cargar sonidos
-        this.correctSound = new Audio('correct.mp3');
-        this.incorrectSound = new Audio('incorrect.mp3');
-        this.timeoutSound = new Audio('timeout.mp3');
+        this.correctSound = new Audio('sonidos/correct.mp3');
+        this.incorrectSound = new Audio('sonidos/incorrect.mp3');
+        this.timeoutSound = new Audio('sonidos/timeout.mp3');
 
         this.resetGameState(selectedTable);
         this.initGame();
