@@ -1,25 +1,27 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Tablas de Multiplicar</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="startScreen" class="game-container start-screen">
+    <section id="startScreen" class="game-container start-screen">
         <h1>Elige tu Tabla</h1>
         <div class="table-selection">
-            <button class="table-btn" data-table="2">Tabla del 2</button>
-            <button class="table-btn" data-table="3">Tabla del 3</button>
-            <button class="table-btn" data-table="4">Tabla del 4</button>
-            <button class="table-btn" data-table="5">Tabla del 5</button>
-            <button class="table-btn" data-table="6">Tabla del 6</button>
-            <button class="table-btn" data-table="7">Tabla del 7</button>
-            <button class="table-btn" data-table="8">Tabla del 8</button>
-            <button class="table-btn" data-table="9">Tabla del 9</button>
+            <button class="table-btn" data-table="2" aria-label="Tabla del 2">Tabla del 2</button>
+            <button class="table-btn" data-table="3" aria-label="Tabla del 3">Tabla del 3</button>
+            <button class="table-btn" data-table="4" aria-label="Tabla del 4">Tabla del 4</button>
+            <button class="table-btn" data-table="5" aria-label="Tabla del 5">Tabla del 5</button>
+            <button class="table-btn" data-table="6" aria-label="Tabla del 6">Tabla del 6</button>
+            <button class="table-btn" data-table="7" aria-label="Tabla del 7">Tabla del 7</button>
+            <button class="table-btn" data-table="8" aria-label="Tabla del 8">Tabla del 8</button>
+            <button class="table-btn" data-table="9" aria-label="Tabla del 9">Tabla del 9</button>
         </div>
-    </div>
+    </section>
 
-    <div id="gameScreen" class="game-container" style="display:none;">
+    <section id="gameScreen" class="game-container" style="display:none;">
         <h1 id="tableTitle">Tabla del 2</h1>
         <div class="timer">
             Tiempo: <span id="timerDisplay">5</span>
@@ -43,7 +45,7 @@
             <button id="restartBtn" class="restart-btn" style="display:none;">Reiniciar Juego</button>
             <button id="backBtn" class="back-btn" style="display:none;">Volver a Tablas</button>
         </div>
-    </div>
+    </section>
 
     <script src="game.js"></script>
 </body>
