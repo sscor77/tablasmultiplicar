@@ -1,51 +1,3 @@
-class Ranking {
-  constructor() {
-      this.rankingKey = 'multiplicationGameRanking';
-      this.ranking = this.getRanking();
-  }
-
-  getRanking() {
-      const ranking = localStorage.getItem(this.rankingKey);
-      return ranking ? JSON.parse(ranking) : [];
-  }
-
-  saveRanking() {
-      localStorage.setItem(this.rankingKey, JSON.stringify(this.ranking));
-  }
-
-  addScore(name, table, correctAnswers) {
-      const score = correctAnswers * (2 + (table - 2) * 0.1); // Fórmula para calcular la puntuación
-      const newEntry = { name, table, score };
-
-      this.ranking.push(newEntry);
-      this.ranking.sort((a, b) => b.score - a.score); // Ordenar de mayor a menor
-      this.ranking = this.ranking.slice(0, 10); // Mantener solo las 10 mejores
-
-      this.saveRanking();
-  }
-
-  resetRanking() {
-      this.ranking = []; // Vacía el ranking
-      this.saveRanking(); // Guarda el ranking vacío en localStorage
-      this.displayRanking(); // Actualiza la visualización del ranking
-  }
-
-  displayRanking() {
-      const rankingContainer = document.getElementById('rankingList');
-      rankingContainer.innerHTML = '';
-
-      const list = document.createElement('ol');
-      this.ranking.forEach((entry, index) => {
-          const listItem = document.createElement('li');
-          listItem.textContent = `${index + 1}. ${entry.name} - Tabla del ${entry.table} - Puntuación: ${entry.score.toFixed(1)}`;
-          list.appendChild(listItem);
-      });
-
-      rankingContainer.appendChild(list);
-      document.getElementById('rankingScreen').style.display = 'block';
-  }
-}
-
 class MultiplicationGame {
   constructor(selectedTable) {
       this.selectedTable = selectedTable;
@@ -88,7 +40,7 @@ class MultiplicationGame {
       this.currentMultiplicand = 0;
       this.correctScore = 0;
       this.incorrectScore = 0;
-      this.questionCount = 0;
+      this.questionCount = 0; // Reiniciar el contador de preguntas
       this.timer = null;
       this.previousMultiplicand = -1;
 
@@ -131,7 +83,7 @@ class MultiplicationGame {
 
   backToTableSelection() {
       if (this.timer) {
-          clearInterval(this.timer);
+          clearInterval(this.timer); // Limpiar el temporizador
       }
       document.getElementById('startScreen').style.display = 'block';
       document.getElementById('gameScreen').style.display = 'none';
