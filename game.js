@@ -1,63 +1,129 @@
-class Ranking {
-  constructor() {
-      this.rankingKey = 'multiplicationGameRanking';
-      this.ranking = this.getRanking();
-  }
+document.addEventListener("DOMContentLoaded", () => {
+    const startScreen = document.getElementById("startScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const rankingScreen = document.getElementById("rankingScreen");
+    const tableButtons = document.querySelectorAll(".table-btn");
+    const questionDisplay = document.getElementById("multiplicationProblem");
+    const optionButtons = document.querySelectorAll(".option-btn");
+    const correctScoreDisplay = document.getElementById("correctScore");
+    const incorrectScoreDisplay = document.getElementById("incorrectScore");
+    const questionCountDisplay = document.getElementById("questionCount");
+    const messageBox = document.getElementById("messageBox");
+    const restartBtn = document.getElementById("restartBtn");
+    const backBtn = document.getElementById("backBtn");
+    const rankingList = document.getElementById("rankingList");
+    const backToStartBtn = document.getElementById("backToStartBtn");
+    const resetRankingBtn = document.getElementById("resetRankingBtn");
+    let currentTable = 2;
+    let correctAnswers = 0;
+    let incorrectAnswers = 0;
+    let questionCount = 0;
+    let timeLeft = 5;
+    let timer;
 
-  getRanking() {
-      const ranking = localStorage.getItem(this.rankingKey);
-      return ranking ? JSON.parse(ranking) : [];
-  }
+    tableButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            currentTable = parseInt(button.dataset.table);
+            document.getElementById("tableTitle").textContent = `Tabla del ${currentTable}`;
+            startGame();
+        });
+    });
 
-  saveRanking() {
-      localStorage.setItem(this.rankingKey, JSON.stringify(this.ranking));
-  }
+    function startGame() {
+        startScreen.style.display = "none";
+        gameScreen.style.display = "block";
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+        questionCount = 0;
+        correctScoreDisplay.textContent = "0";
+        incorrectScoreDisplay.textContent = "0";
+        questionCountDisplay.textContent = "0/10";
+        messageBox.textContent = "";
+        nextQuestion();
+    }
 
-  addScore(name, table, correctAnswers) {
-      const score = correctAnswers * (2 + (table - 2) * 0.1); // Fórmula para calcular la puntuación
-      const newEntry = { name, table, score };
+    function nextQuestion() {
+        if (questionCount >= 10) {
+            endGame();
+            return;
+        }
 
-      this.ranking.push(newEntry);
-      this.ranking.sort((a, b) => b.score - a.score); // Ordenar de mayor a menor
-      this.ranking = this.ranking.slice(0, 10); // Mantener solo las 10 mejores
+        let num = Math.floor(Math.random() * 10);
+        let correctAnswer = currentTable * num;
+        questionDisplay.textContent = `${currentTable} × ${num} = ?`;
+        let answers = generateAnswers(correctAnswer);
+        
+        optionButtons.forEach((btn, index) => {
+            btn.textContent = answers[index];
+            btn.classList.remove("correct", "incorrect");
+            btn.disabled = false;
+            btn.onclick = () => checkAnswer(btn, correctAnswer);
+        });
 
-      this.saveRanking();
-  }
+        questionCount++;
+        questionCountDisplay.textContent = `${questionCount}/10`;
+    }
 
-  resetRanking() {
-      this.ranking = [];
-      this.saveRanking();
-      this.displayRanking();
-  }
+    function generateAnswers(correctAnswer) {
+        let answers = new Set([correctAnswer]);
+        while (answers.size < 3) {
+            let wrongAnswer = correctAnswer + Math.floor(Math.random() * 5) - 2;
+            if (wrongAnswer >= 0) answers.add(wrongAnswer);
+        }
+        return Array.from(answers).sort(() => Math.random() - 0.5);
+    }
 
-  displayRanking() {
-      const rankingContainer = document.getElementById('rankingList');
-      rankingContainer.innerHTML = '';
+    function checkAnswer(button, correctAnswer) {
+        let selectedAnswer = parseInt(button.textContent);
+        if (selectedAnswer === correctAnswer) {
+            button.classList.add("correct");
+            correctAnswers++;
+            correctScoreDisplay.textContent = correctAnswers;
+            messageBox.textContent = "¡Correcto!";
+        } else {
+            button.classList.add("incorrect");
+            incorrectAnswers++;
+            incorrectScoreDisplay.textContent = incorrectAnswers;
+            messageBox.textContent = "Incorrecto";
+        }
+        optionButtons.forEach(btn => btn.disabled = true);
+        setTimeout(nextQuestion, 1000);
+    }
 
-      const list = document.createElement('ol');
-      this.ranking.forEach((entry, index) => {
-          const listItem = document.createElement('li');
-          listItem.textContent = `${index + 1}. ${entry.name} - Tabla del ${entry.table} - Puntuación: ${entry.score.toFixed(1)}`;
-          list.appendChild(listItem);
-      });
+    function endGame() {
+        setTimeout(() => {
+            gameScreen.style.display = "none";
+            rankingScreen.style.display = "block";
+            updateRanking(correctAnswers);
+        }, 1000);
+    }
 
-      rankingContainer.appendChild(list);
-      document.getElementById('rankingScreen').style.display = 'block';
-  }
-}
+    function updateRanking(score) {
+        let scores = JSON.parse(localStorage.getItem("ranking")) || [];
+        scores.push(score);
+        scores.sort((a, b) => b - a);
+        scores = scores.slice(0, 10);
+        localStorage.setItem("ranking", JSON.stringify(scores));
+        rankingList.innerHTML = scores.map((s, i) => `<p>${i + 1}. ${s} puntos</p>`).join(" ");
+    }
 
-// Añade el evento para resetear el ranking
-document.addEventListener('DOMContentLoaded', () => {
-  const resetRankingBtn = document.getElementById('resetRankingBtn');
-  
-  resetRankingBtn.addEventListener('click', () => {
-      const password = prompt('Introduce la contraseña para resetear el ranking:');
-      if (password === 'Santi2019') {
-          const ranking = new Ranking();
-          ranking.resetRanking();
-          alert('El ranking ha sido reseteado.');
-      } else {
-          alert('Contraseña incorrecta. No se ha reseteado el ranking.');
-      }
-  });
+    restartBtn.addEventListener("click", () => {
+        gameScreen.style.display = "none";
+        startScreen.style.display = "block";
+    });
+
+    backBtn.addEventListener("click", () => {
+        gameScreen.style.display = "none";
+        startScreen.style.display = "block";
+    });
+
+    backToStartBtn.addEventListener("click", () => {
+        rankingScreen.style.display = "none";
+        startScreen.style.display = "block";
+    });
+
+    resetRankingBtn.addEventListener("click", () => {
+        localStorage.removeItem("ranking");
+        rankingList.innerHTML = "";
+    });
 });
