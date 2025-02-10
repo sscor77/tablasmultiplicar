@@ -1,0 +1,50 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego de Tablas de Multiplicar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="startScreen" class="game-container start-screen">
+        <h1>Elige tu Tabla</h1>
+        <div class="table-selection">
+            <button class="table-btn" data-table="2">Tabla del 2</button>
+            <button class="table-btn" data-table="3">Tabla del 3</button>
+            <button class="table-btn" data-table="4">Tabla del 4</button>
+            <button class="table-btn" data-table="5">Tabla del 5</button>
+            <button class="table-btn" data-table="6">Tabla del 6</button>
+            <button class="table-btn" data-table="7">Tabla del 7</button>
+            <button class="table-btn" data-table="8">Tabla del 8</button>
+            <button class="table-btn" data-table="9">Tabla del 9</button>
+        </div>
+    </div>
+
+    <div id="gameScreen" class="game-container" style="display:none;">
+        <h1 id="tableTitle">Tabla del 2</h1>
+        <div class="timer">
+            Tiempo: <span id="timerDisplay">5</span>
+        </div>
+        <div class="question-area">
+            <h2 id="questionDisplay">¿Cuánto es?</h2>
+            <p id="multiplicationProblem" class="problem">2 × 0 = </p>
+        </div>
+        <div class="answer-options">
+            <button id="option1" class="option-btn"></button>
+            <button id="option2" class="option-btn"></button>
+            <button id="option3" class="option-btn"></button>
+        </div>
+        <div class="score-area">
+            <div class="score-line" style="color: green;">Correctas: <span id="correctScore">0</span></div>
+            <div class="score-line" style="color: red;">Incorrectas: <span id="incorrectScore">0</span></div>
+            <div class="score-line">Pregunta: <span id="questionCount">0</span>/10</div>
+        </div>
+        <div id="messageBox" class="message"></div>
+        <div class="game-actions">
+            <button id="restartBtn" class="restart-btn" style="display:none;">Reiniciar Juego</button>
+            <button id="backBtn" class="back-btn" style="display:none;">Volver a Tablas</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
