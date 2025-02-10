@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+body {
+    font-family: 'Comic Neue', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #FFD54F;
+    background: linear-gradient(135deg, #FFD54F 0%, #FFC107 100%);
+}
+
+.game-container {
+    text-align: center;
+    background-color: #FFFFFF;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 450px;
+    border: 5px solid #FF5722;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(#FF9800 20%, transparent 20%),
+        radial-gradient(#FF9800 20%, transparent 20%);
+    background-position: 0 0, 25px 25px;
+    background-size: 50px 50px;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+h1 {
+    color: #FF5722;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.table-selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.table-btn {
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Comic Neue', cursive;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 120px;
+}
+
+.table-btn:hover {
+    transform: scale(1.05);
+    background-color: #66BB6A;
+    box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+}
+
+.timer {
+    font-size: 28px;  
+    color: #FF5722;
+    margin-bottom: 20px;  
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.question-area {
+    margin-bottom: 20px;
+}
+
+.problem {
+    font-size: 40px;  
+    font-weight: bold;
+    color: #2196F3;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    margin-bottom: 20px;  
+}
+
+.answer-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.option-btn {
+    padding: 15px 30px;  
+    font-size: 24px;  
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Comic Neue', cursive;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 120px;  
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.option-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+}
+
+.option-btn.correct {
+    background-color: #8BC34A;
+}
+
+.option-btn.incorrect {
+    background-color: #F44336;
+}
+
+.score-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.correct-score {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.incorrect-score {
+    color: #F44336;
+    font-weight: bold;
+}
+
+.message {
+    margin: 10px 0;
+    font-weight: bold;
+    height: 30px;
+    font-size: 1.2rem;
+}
+
+.game-actions {
+    display: flex;
+    justify-content: space-between;  
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.restart-btn, .back-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: 'Comic Neue', cursive;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: white;
+}
+
+.restart-btn {
+    background-color: #FF5722;
+    order: -1;  
+}
+
+.restart-btn:hover {
+    background-color: #FF7043;
+    transform: scale(1.05);
+}
+
+.back-btn {
+    background-color: #2196F3;
+}
+
+.back-btn:hover {
+    background-color: #64B5F6;
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .game-container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .problem {
+        font-size: 32px;
+    }
+
+    .option-btn {
+        padding: 12px 25px;
+        font-size: 20px;
+        min-width: 100px;
+    }
+
+    .timer {
+        font-size: 24px;
+    }
+
+    .table-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        min-width: 80px;
+    }
+
+    .game-actions {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .restart-btn, .back-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Ensure text doesn't overflow */
+* {
+    max-width: 100%;
+    box-sizing: border-box;
+}
