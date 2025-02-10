@@ -1,3 +1,45 @@
+class Ranking {
+    constructor() {
+        this.rankingKey = 'multiplicationGameRanking';
+        this.ranking = this.getRanking();
+    }
+
+    getRanking() {
+        const ranking = localStorage.getItem(this.rankingKey);
+        return ranking ? JSON.parse(ranking) : [];
+    }
+
+    saveRanking() {
+        localStorage.setItem(this.rankingKey, JSON.stringify(this.ranking));
+    }
+
+    addScore(name, table, correctAnswers) {
+        const score = correctAnswers * (2 + (table - 2) * 0.1); // Fórmula para calcular la puntuación
+        const newEntry = { name, table, score };
+
+        this.ranking.push(newEntry);
+        this.ranking.sort((a, b) => b.score - a.score); // Ordenar de mayor a menor
+        this.ranking = this.ranking.slice(0, 10); // Mantener solo las 10 mejores
+
+        this.saveRanking();
+    }
+
+    displayRanking() {
+        const rankingContainer = document.getElementById('rankingList');
+        rankingContainer.innerHTML = '';
+
+        const list = document.createElement('ol');
+        this.ranking.forEach((entry, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${index + 1}. ${entry.name} - Tabla del ${entry.table} - Puntuación: ${entry.score.toFixed(1)}`;
+            list.appendChild(listItem);
+        });
+
+        rankingContainer.appendChild(list);
+        document.getElementById('rankingScreen').style.display = 'block';
+    }
+}
+
 class MultiplicationGame {
     constructor(selectedTable) {
         this.selectedTable = selectedTable;
@@ -193,7 +235,15 @@ class MultiplicationGame {
 
         this.restartBtn.style.display = 'block';
         this.backBtn.style.display = 'block';
-        this.messageBox.textContent = ''; 
+        this.messageBox.textContent = '';
+
+        // Mostrar el ranking
+        const ranking = new Ranking();
+        const playerName = prompt('¡Juego terminado! Ingresa tu nombre para guardar tu puntuación:');
+        if (playerName) {
+            ranking.addScore(playerName, this.selectedTable, this.correctScore);
+            ranking.displayRanking();
+        }
     }
 
     resetGame() {
@@ -205,6 +255,8 @@ class MultiplicationGame {
 document.addEventListener('DOMContentLoaded', () => {
     const startScreen = document.getElementById('startScreen');
     const gameScreen = document.getElementById('gameScreen');
+    const rankingScreen = document.getElementById('rankingScreen');
+    const backToStartBtn = document.getElementById('backToStartBtn');
     
     document.querySelectorAll('.table-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -225,5 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create a new game instance and store it globally
             window.currentGame = new MultiplicationGame(selectedTable);
         });
+    });
+
+    backToStartBtn.addEventListener('click', () => {
+        rankingScreen.style.display = 'none';
+        startScreen.style.display = 'block';
     });
 });
